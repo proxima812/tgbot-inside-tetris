@@ -538,29 +538,32 @@ module.exports = async (request, response) => {
     // Получаем тело POST-запроса от Telegram
     const { body } = request
 
-    // Проверяем, что это сообщение
     if (body.message) {
       const {
+        message_id,
         chat: { id },
         text,
       } = body.message
 
-      // Обработка команды /q для случайного вопроса
       if (text === '/q') {
         const randomIndex = Math.floor(Math.random() * questions.length)
         const question = questions[randomIndex]
-        // Форматирование сообщения с жирным шрифтом для вопроса
         const message = `🎈 Ваша тема: \n\n*"${question}"*`
-        // Отправляем сообщение обратно
+
         await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+
+        // Попытка удалить сообщение с командой /q
+        try {
+          await bot.deleteMessage(id, message_id)
+        } catch (error) {
+          console.error('Error deleting message', error.toString())
+        }
       }
     }
   } catch (error) {
-    // Логируем ошибки в консоль Vercel
     console.error('Error sending message')
     console.log(error.toString())
   }
 
-  // Подтверждаем получение сообщения Telegram
   response.send('OK')
 }
