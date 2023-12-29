@@ -559,41 +559,20 @@
           messageIds.set(id, [])
         }
 
-             if (text === '/q') {
-               const randomIndex = Math.floor(Math.random() * questions.length)
-               const question = questions[randomIndex]
-               const message = `🎈 Ваша тема: \n\n*"${question}"*`
+        if (text === '/q') {
+          const randomIndex = Math.floor(Math.random() * questions.length)
+          const question = questions[randomIndex]
+          const message = `🎈 Ваша тема: \n\n*"${question}"*`
 
-               bot
-                 .sendMessage(id, message, { parse_mode: 'Markdown' })
-                 .then((sentMessage) => {
-                   if (!messageIds.has(id)) {
-                     messageIds.set(id, [])
-                   }
-                   messageIds.get(id).push(sentMessage.message_id)
-                 })
+          await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 
-               try {
-                 await bot.deleteMessage(id, message_id)
-               } catch (error) {
-                 console.error('Error deleting message', error.toString())
-               }
-             }
-
-        // if (text === '/q') {
-        //   const randomIndex = Math.floor(Math.random() * questions.length)
-        //   const question = questions[randomIndex]
-        //   const message = `🎈 Ваша тема: \n\n*"${question}"*`
-
-        //   await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
-
-        //   // Попытка удалить сообщение с командой /q
-        //   try {
-        //     await bot.deleteMessage(id, message_id)
-        //   } catch (error) {
-        //     console.error('Error deleting message', error.toString())
-        //   }
-        // }
+          // Попытка удалить сообщение с командой /q
+          try {
+            await bot.deleteMessage(id, message_id)
+          } catch (error) {
+            console.error('Error deleting message', error.toString())
+          }
+        }
 
         if (text === '/stop11') {
           // Сообщение, которое вы хотите отправить
@@ -630,8 +609,13 @@
   С любовью, 
   Группа Душа ❤️`
 
-          // Отправляем сообщение с Markdown-форматированием
-          await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+          bot.sendMessage(id, message, { parse_mode: 'Markdown' }).then((sentMessage) => {
+            if (!messageIds.has(id)) {
+              messageIds.set(id, [])
+            }
+            messageIds.get(id).push(sentMessage.message_id)
+          })
+
           try {
             await bot.deleteMessage(id, message_id)
           } catch (error) {
@@ -658,17 +642,25 @@
   С любовью, 
   Группа Душа ❤️`
 
-          // Отправляем сообщение с Markdown-форматированием
-          await bot.sendMessage(id, message, {
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-          })
+          bot
+            .sendMessage(id, message, {
+              parse_mode: 'Markdown',
+              disable_web_page_preview: true,
+            })
+            .then((sentMessage) => {
+              if (!messageIds.has(id)) {
+                messageIds.set(id, [])
+              }
+              messageIds.get(id).push(sentMessage.message_id)
+            })
+
           try {
             await bot.deleteMessage(id, message_id)
           } catch (error) {
             console.error('Error deleting message', error.toString())
           }
         }
+        
       }
     } catch (error) {
       console.error('Error sending message')
