@@ -597,6 +597,11 @@ module.exports = async (request, response) => {
 
         // Отправляем сообщение с Markdown-форматированием
         await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+        try {
+          await bot.deleteMessage(id, message_id)
+        } catch (error) {
+          console.error('Error deleting message', error.toString())
+        }
       }
 
       if (text === '/stop10') {
@@ -619,8 +624,17 @@ module.exports = async (request, response) => {
 Группа Душа ❤️`
 
         // Отправляем сообщение с Markdown-форматированием
-        await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+        await bot.sendMessage(id, message, {
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+        })
+        try {
+          await bot.deleteMessage(id, message_id)
+        } catch (error) {
+          console.error('Error deleting message', error.toString())
+        }
       }
+
     }
   } catch (error) {
     console.error('Error sending message')
