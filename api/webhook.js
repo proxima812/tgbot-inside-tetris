@@ -559,24 +559,41 @@
           messageIds.set(id, [])
         }
 
-        if (text === '/q') {
-          const randomIndex = Math.floor(Math.random() * questions.length)
-          const question = questions[randomIndex]
-          const message = `🎈 Ваша тема: \n\n*"${question}"*`
+             if (text === '/q') {
+               const randomIndex = Math.floor(Math.random() * questions.length)
+               const question = questions[randomIndex]
+               const message = `🎈 Ваша тема: \n\n*"${question}"*`
 
-  bot.sendMessage(id, message, { parse_mode: 'Markdown' }).then((sentMessage) => {
-    if (!messageIds.has(id)) {
-      messageIds.set(id, [])
-    }
-    messageIds.get(id).push(sentMessage.message_id)
-  })
+               bot
+                 .sendMessage(id, message, { parse_mode: 'Markdown' })
+                 .then((sentMessage) => {
+                   if (!messageIds.has(id)) {
+                     messageIds.set(id, [])
+                   }
+                   messageIds.get(id).push(sentMessage.message_id)
+                 })
 
-  try {
-    await bot.deleteMessage(id, message_id)
-  } catch (error) {
-    console.error('Error deleting message', error.toString())
-  }
-        }
+               try {
+                 await bot.deleteMessage(id, message_id)
+               } catch (error) {
+                 console.error('Error deleting message', error.toString())
+               }
+             }
+
+        // if (text === '/q') {
+        //   const randomIndex = Math.floor(Math.random() * questions.length)
+        //   const question = questions[randomIndex]
+        //   const message = `🎈 Ваша тема: \n\n*"${question}"*`
+
+        //   await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+
+        //   // Попытка удалить сообщение с командой /q
+        //   try {
+        //     await bot.deleteMessage(id, message_id)
+        //   } catch (error) {
+        //     console.error('Error deleting message', error.toString())
+        //   }
+        // }
 
         if (text === '/stop11') {
           // Сообщение, которое вы хотите отправить
