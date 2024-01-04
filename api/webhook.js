@@ -567,11 +567,11 @@
           await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 
           // Попытка удалить сообщение с командой /q
-          try {
-            await bot.deleteMessage(id, message_id)
-          } catch (error) {
-            console.error('Error deleting message', error.toString())
-          }
+          // try {
+          //   await bot.deleteMessage(id, message_id)
+          // } catch (error) {
+          //   console.error('Error deleting message', error.toString())
+          // }
         }
 
         if (text === '/stop11') {
