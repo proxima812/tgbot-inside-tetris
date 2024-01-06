@@ -644,7 +644,10 @@ module.exports = async (request, response) => {
   С любовью, 
   Группа Душа ❤️`
 
-        await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+        await bot.sendMessage(id, message, {
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+        })
         try {
           await bot.deleteMessage(id, message_id)
         } catch (error) {
