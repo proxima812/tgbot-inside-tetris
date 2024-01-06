@@ -550,13 +550,15 @@ module.exports = async (request, response) => {
       // Удаление предыдущих сообщений
       if (messageIds.has(id)) {
         messageIds.get(id).forEach(async (messageId) => {
-          try {
-            await bot.deleteMessage(id, messageId)
-          } catch (error) {
-            console.error('Error deleting message', error.toString())
+          if (messageId !== message_id) {
+            // Добавить эту проверку
+            try {
+              await bot.deleteMessage(id, messageId)
+            } catch (error) {
+              console.error('Error deleting message', error.toString())
+            }
           }
         })
-        messageIds.set(id, [])
       }
 
       if (text === '/q') {
