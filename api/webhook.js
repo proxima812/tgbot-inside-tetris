@@ -614,12 +614,7 @@ module.exports = async (request, response) => {
   С любовью, 
   Группа Душа ❤️`
 
-        bot.sendMessage(id, message, { parse_mode: 'Markdown' }).then((sentMessage) => {
-          if (!messageIds.has(id)) {
-            messageIds.set(id, [])
-          }
-          messageIds.get(id).push(sentMessage.message_id)
-        })
+        await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 
         try {
           await bot.deleteMessage(id, message_id)
@@ -649,18 +644,7 @@ module.exports = async (request, response) => {
   С любовью, 
   Группа Душа ❤️`
 
-        bot
-          .sendMessage(id, message, {
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-          })
-          .then((sentMessage) => {
-            if (!messageIds.has(id)) {
-              messageIds.set(id, [])
-            }
-            messageIds.get(id).push(sentMessage.message_id)
-          })
-
+        await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
         try {
           await bot.deleteMessage(id, message_id)
         } catch (error) {
