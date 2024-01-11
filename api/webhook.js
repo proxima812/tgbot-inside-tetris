@@ -531,6 +531,8 @@ const questions = [
 
 let messageIds = new Map()
 
+const botUsername = 'tetris_dusha_bot'
+
 // Экспортируем функцию как асинхронную
 module.exports = async (request, response) => {
   try {
@@ -561,7 +563,7 @@ module.exports = async (request, response) => {
         })
       }
 
-      if (text === '/q') {
+      if (text === '/q' || text === `/rules@${botUsername}`) {
         const randomIndex = Math.floor(Math.random() * questions.length)
         const question = questions[randomIndex]
         const message = `🎈 Ваша тема: \n\n*"${question}"*`
@@ -576,7 +578,7 @@ module.exports = async (request, response) => {
         // }
       }
 
-      if (text === '/rules') {
+      if (text === '/rules' || text === `/rules@${botUsername}`) {
         const message = `❗️ПРАВИЛА ЧАТА ❗️
 
 Чат создан для обмена опытом по разбору 10 шага программы «12 шагов» участников Группы Душа.
@@ -607,7 +609,7 @@ module.exports = async (request, response) => {
         }
       }
 
-      if (text === '/stop11') {
+      if (text === '/stop11' || text === `/rules@${botUsername}`) {
         // Сообщение, которое вы хотите отправить
         const message = `🛑 *11 ШАГ - ОСТАНОВИСЬ!*
 
@@ -654,7 +656,7 @@ module.exports = async (request, response) => {
         }
       }
 
-      if (text === '/stop10') {
+      if (text === '/stop10' || text === `/rules@${botUsername}`) {
         // Сообщение, которое вы хотите отправить
         const message = `🛑 **10 ШАГ - ОСТАНОВИСЬ!**
 
