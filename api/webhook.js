@@ -563,7 +563,7 @@ module.exports = async (request, response) => {
         })
       }
 
-      if (text === '/q' || text === `/rules@${botUsername}`) {
+      if (text === '/q' || text === `/q@${botUsername}`) {
         const randomIndex = Math.floor(Math.random() * questions.length)
         const question = questions[randomIndex]
         const message = `🎈 Ваша тема: \n\n*"${question}"*`
@@ -609,7 +609,7 @@ module.exports = async (request, response) => {
         }
       }
 
-      if (text === '/stop11' || text === `/rules@${botUsername}`) {
+      if (text === '/stop11' || text === `/stop11@${botUsername}`) {
         // Сообщение, которое вы хотите отправить
         const message = `🛑 *11 ШАГ - ОСТАНОВИСЬ!*
 
@@ -656,7 +656,7 @@ module.exports = async (request, response) => {
         }
       }
 
-      if (text === '/stop10' || text === `/rules@${botUsername}`) {
+      if (text === '/stop10' || text === `/stop10@${botUsername}`) {
         // Сообщение, которое вы хотите отправить
         const message = `🛑 **10 ШАГ - ОСТАНОВИСЬ!**
 
