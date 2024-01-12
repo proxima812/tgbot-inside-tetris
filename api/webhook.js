@@ -584,7 +584,9 @@ module.exports = async (request, response) => {
 			// 	})
 			// }
 
-			// Проверка на команду
+			addMessageId(id, message_id)
+
+			// Проверка на команду и удаление предыдущих сообщений
 			if (
 				[
 					'/q',
