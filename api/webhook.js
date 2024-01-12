@@ -533,21 +533,23 @@ let messageIds = new Map()
 
 // Функция для добавления ID сообщения в Map
 function addMessageId(chatId, messageId) {
-    if (!messageIds.has(chatId)) {
-        messageIds.set(chatId, [])
-    }
-    messageIds.get(chatId).push(messageId)
+	if (!messageIds.has(chatId)) {
+		messageIds.set(chatId, [])
+	}
+	messageIds.get(chatId).push(messageId)
 }
 
 // Функция для удаления предыдущих сообщений
 function deletePreviousMessages(chatId, bot) {
-    if (messageIds.has(chatId)) {
-        const ids = messageIds.get(chatId)
-        ids.forEach(id => {
-            bot.deleteMessage(chatId, id).catch(error => console.error('Error deleting message', error.toString()))
-        })
-        messageIds.set(chatId, []) // Очищаем массив после удаления сообщений
-    }
+	if (messageIds.has(chatId)) {
+		const ids = messageIds.get(chatId)
+		ids.forEach(id => {
+			bot
+				.deleteMessage(chatId, id)
+				.catch(error => console.error('Error deleting message', error.toString()))
+		})
+		messageIds.set(chatId, []) // Очищаем массив после удаления сообщений
+	}
 }
 
 const botUsername = 'tetris_dusha_bot'
@@ -598,13 +600,17 @@ module.exports = async (request, response) => {
 				deletePreviousMessages(id, bot)
 			}
 
-      if (text === '/q' || text === `/q@${botUsername}`) {
-         addMessageId(id, message_id)
+			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
 				const question = questions[randomIndex]
 				const message = `🎈 Ваша тема: \n\n*"${question}"*`
 
-				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
+				await bot
+					.sendMessage(id, message, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
 
 				// Попытка удалить сообщение с командой /q
 				// try {
