@@ -531,12 +531,29 @@ const questions = [
 
 let messageIds = new Map()
 
+// Функция для проверки, является ли сообщение командой
+function isCommand(text) {
+	const commands = [
+		'/q',
+		`/q@${botUsername}`,
+		'/rules',
+		`/rules@${botUsername}`,
+		'/stop11',
+		`/stop11@${botUsername}`,
+		'/stop10',
+		`/stop10@${botUsername}`,
+	]
+	return commands.includes(text)
+}
+
 // Функция для добавления ID сообщения в Map
-function addMessageId(chatId, messageId) {
-	if (!messageIds.has(chatId)) {
+function addMessageId(chatId, messageId, text) {
+	if (isCommand(text) && !messageIds.has(chatId)) {
 		messageIds.set(chatId, [])
 	}
-	messageIds.get(chatId).push(messageId)
+	if (isCommand(text)) {
+		messageIds.get(chatId).push(messageId)
+	}
 }
 
 // Функция для удаления предыдущих сообщений
@@ -570,21 +587,12 @@ module.exports = async (request, response) => {
 				text,
 			} = body.message
 
-			// Удаление предыдущих сообщений
-			// if (messageIds.has(id)) {
-			// 	messageIds.get(id).forEach(async messageId => {
-			// 		if (messageId !== message_id) {
-			// 			// Добавить эту проверку
-			// 			try {
-			// 				await bot.deleteMessage(id, messageId)
-			// 			} catch (error) {
-			// 				console.error('Error deleting message', error.toString())
-			// 			}
-			// 		}
-			// 	})
-			// }
+			addMessageId(id, message_id, text)
 
-			addMessageId(id, message_id)
+			// Проверка на команду и удаление предыдущих сообщений
+			if (isCommand(text)) {
+				deletePreviousMessages(id, bot)
+			}
 
 			// Проверка на команду и удаление предыдущих сообщений
 			if (
