@@ -644,13 +644,12 @@ module.exports = async (request, response) => {
 Спасибо 🙏🏼 
 
 Возьмите то, что вам подходит и отбросьте всё остальное ❤️`
-				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
-
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
+				await bot
+					.sendMessage(id, message, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
 			if (text === '/stop11' || text === `/stop11@${botUsername}`) {
@@ -691,13 +690,12 @@ module.exports = async (request, response) => {
   С любовью, 
   Группа Душа ❤️`
 
-				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
-
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
+				await bot
+					.sendMessage(id, message, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
 			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
@@ -727,15 +725,15 @@ module.exports = async (request, response) => {
   С любовью, 
   Группа Душа ❤️`
 
-				await bot.sendMessage(id, message, {
-					parse_mode: 'Markdown',
-					disable_web_page_preview: true,
-				})
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
+				await bot
+					.sendMessage(id, message, {
+						parse_mode: 'Markdown',
+						disable_web_page_preview: true,
+					})
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
 			}
 		}
 	} catch (error) {
