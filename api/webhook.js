@@ -110,9 +110,9 @@ module.exports = async (request, response) => {
   Группа Душа ❤️`
 
 	// Создаем экземпляр бота на верхнем уровне
-	const bot = new TelegramBot(TOKEN)
-
+  
 	try {
+    const bot = new TelegramBot(TOKEN)
 		const { body } = request
 		if (body.message) {
 			const {
