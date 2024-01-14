@@ -26,26 +26,21 @@ function isCommand(text) {
 	return commands.includes(text)
 }
 
-// Функция для добавления ID сообщения в Map
 function addMessageId(chatId, messageId, text) {
-	if (isCommand(text) && !messageIds.has(chatId)) {
-		messageIds.set(chatId, [])
+	if (['/stop10', '/stop11'].includes(text)) {
+		// Если это одна из команд, удаляем предыдущее сообщение
+		deletePreviousMessages(chatId, bot)
 	}
-	if (isCommand(text)) {
-		messageIds.get(chatId).push(messageId)
-	}
+	// Затем добавляем новый ID
+	messageIds.set(chatId, messageId)
 }
 
-// Функция для удаления предыдущих сообщений
 function deletePreviousMessages(chatId, bot) {
 	if (messageIds.has(chatId)) {
-		const ids = messageIds.get(chatId)
-		ids.forEach(id => {
-			bot
-				.deleteMessage(chatId, id)
-				.catch(error => console.error('Error deleting message', error.toString()))
-		})
-		messageIds.set(chatId, []) // Очищаем массив после удаления сообщений
+		const messageId = messageIds.get(chatId)
+		bot
+			.deleteMessage(chatId, messageId)
+			.catch(error => console.error('Error deleting message', error.toString()))
 	}
 }
 
@@ -148,6 +143,18 @@ module.exports = async (request, response) => {
 
 			if (isCommand(text)) {
 				deletePreviousMessages(id, bot)
+			}
+
+			// В обработчике команд
+			if (['/stop10', '/stop11'].includes(text)) {
+				const messageToSend = text === '/stop10' ? stop10Message : stop11Message
+
+				await bot
+					.sendMessage(id, messageToSend, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id, text) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
 			if (text === '/q' || text === `/q@${botUsername}`) {
