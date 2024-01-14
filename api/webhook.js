@@ -1,13 +1,22 @@
-// https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294
 // Fixes an error with Promise cancellation
 process.env.NTBA_FIX_319 = 'test'
 const TOKEN = process.env.API_TOKEN
-const TelegramBot = require('node-telegram-bot-api')
 
+// Проверяем, что токен доступен
+if (!TOKEN) {
+	console.error('Telegram Bot Token is not provided!')
+	process.exit(1) // Завершаем выполнение, если токен не предоставлен
+}
+
+const TelegramBot = require('node-telegram-bot-api')
 const questions = require('./questions')
 const { rulesMessage, stop11Message, stop10Message } = require('./MsgCommands')
 
+// Создаем экземпляр бота на верхнем уровне
+const bot = new TelegramBot(TOKEN)
+
 let messageIds = new Map()
+const botUsername = 'tetris_dusha_bot'
 
 // Функция для проверки, является ли сообщение командой
 function isCommand(text) {
@@ -47,17 +56,11 @@ function deletePreviousMessages(chatId, bot) {
 	}
 }
 
-const botUsername = 'tetris_dusha_bot'
 
 // Экспортируем функцию как асинхронную
 module.exports = async (request, response) => {
 	try {
-		// Создаем новый экземпляр бота с токеном от BotFather
-		const bot = new TelegramBot(TOKEN)
-
-		// Получаем тело POST-запроса от Telegram
 		const { body } = request
-
 		if (body.message) {
 			const {
 				message_id,
@@ -67,9 +70,8 @@ module.exports = async (request, response) => {
 
 			addMessageId(id, message_id, text)
 
-			// Проверка на команду и удаление предыдущих сообщений
 			if (isCommand(text)) {
-				deletePreviousMessages(id, bot)
+				deletePreviousMessages(id)
 			}
 
 			if (text === '/q' || text === `/q@${botUsername}`) {
@@ -101,9 +103,7 @@ module.exports = async (request, response) => {
 					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
-      console.log(`Received command: ${text}`)
-      if (text === '/stop10' || text === `/stop10@${botUsername}`) {
-        console.log('Processing /stop10 command')
+			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
 				await bot
 					.sendMessage(id, stop10Message, { parse_mode: 'Markdown' })
 					.then(sentMessage => {
@@ -122,8 +122,7 @@ module.exports = async (request, response) => {
 			}
 		}
 	} catch (error) {
-		console.error('Error sending message')
-		console.log(error.toString())
+		console.error('Error in bot operation:', error.toString())
 	}
 
 	response.send('OK')
