@@ -5,6 +5,7 @@ const TOKEN = process.env.API_TOKEN
 const TelegramBot = require('node-telegram-bot-api')
 
 const questions = require('./questions')
+const { rulesMessage, stop11Message, stop10Message } = require('./MsgCommands')
 
 let messageIds = new Map()
 
@@ -50,7 +51,6 @@ const botUsername = 'tetris_dusha_bot'
 
 // Экспортируем функцию как асинхронную
 module.exports = async (request, response) => {
-	const { rulesMessage, stop11Message, stop10Message } = require('./MsgCommands')
 	try {
 		// Создаем новый экземпляр бота с токеном от BotFather
 		const bot = new TelegramBot(TOKEN)
@@ -101,7 +101,9 @@ module.exports = async (request, response) => {
 					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
-			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
+      console.log(`Received command: ${text}`)
+      if (text === '/stop10' || text === `/stop10@${botUsername}`) {
+        console.log('Processing /stop10 command')
 				await bot
 					.sendMessage(id, stop10Message, { parse_mode: 'Markdown' })
 					.then(sentMessage => {
