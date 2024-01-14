@@ -19,7 +19,7 @@ const lastCommandUsage = {};
 // Функция для проверки анти-спама
 function canUseCommand(chatId, command) {
   const currentTime = Date.now();
-  const timeLimit = 300000; // 5 минут в миллисекундах
+  const timeLimit = 180000 // 5 минут в миллисекундах
 
   if (!lastCommandUsage[chatId]) {
     lastCommandUsage[chatId] = {};
@@ -84,7 +84,7 @@ module.exports = async (request, response) => {
 					// Отправить сообщение о блокировке команды из-за анти-спама
 					await bot.sendMessage(
 						id,
-						'Пожалуйста, подождите перед повторным использованием команды.',
+						'Пожалуйста, подождите 3 миниты перед повторным использованием команды.',
 					)
 				}
 			}
