@@ -139,11 +139,11 @@ module.exports = async (request, response) => {
 				text,
 			} = body.message
 
-			addMessageId(id, message_id, text)
+			// addMessageId(id, message_id, text)
 
-			if (isCommand(text)) {
-				deletePreviousMessages(id, bot)
-			}
+			// if (isCommand(text)) {
+			// 	deletePreviousMessages(id, bot)
+			// }
 
 			// В обработчике команд
 			if (['/stop10', '/stop11'].includes(text)) {
