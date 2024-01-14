@@ -73,20 +73,20 @@ module.exports = async (request, response) => {
 			}
 
 			// Проверка на команду и удаление предыдущих сообщений
-			if (
-				[
-					'/q',
-					`/q@${botUsername}`,
-					'/rules',
-					`/rules@${botUsername}`,
-					'/stop11',
-					`/stop11@${botUsername}`,
-					'/stop10',
-					`/stop10@${botUsername}`,
-				].includes(text)
-			) {
-				deletePreviousMessages(id, bot)
-			}
+			// if (
+			// 	[
+			// 		'/q',
+			// 		`/q@${botUsername}`,
+			// 		'/rules',
+			// 		`/rules@${botUsername}`,
+			// 		'/stop11',
+			// 		`/stop11@${botUsername}`,
+			// 		'/stop10',
+			// 		`/stop10@${botUsername}`,
+			// 	].includes(text)
+			// ) {
+			// 	deletePreviousMessages(id, bot)
+			// }
 
 			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
