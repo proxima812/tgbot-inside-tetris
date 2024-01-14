@@ -1,6 +1,6 @@
 // Fixes an error with Promise cancellation
 process.env.NTBA_FIX_319 = 'test'
-const TOKEN = process.env.API_TOKEN
+const TOKEN = process.env.TOKEN
 
 // Проверяем, что токен доступен
 if (!TOKEN) {
