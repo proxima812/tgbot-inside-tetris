@@ -41,26 +41,26 @@ module.exports = async (request, response) => {
 				}
 			}
 
-			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
-				await bot.sendMessage(id, stop10Message, {
-					parse_mode: 'Markdown',
-					disable_web_page_preview: true,
-				})
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
-			}
+			// if (text === '/stop10' || text === `/stop10@${botUsername}`) {
+			// 	await bot.sendMessage(id, stop10Message, {
+			// 		parse_mode: 'Markdown',
+			// 		disable_web_page_preview: true,
+			// 	})
+			// 	try {
+			// 		await bot.deleteMessage(id, message_id)
+			// 	} catch (error) {
+			// 		console.error('Error deleting message', error.toString())
+			// 	}
+			// }
 
-			if (text === '/stop11' || text === `/stop11@${botUsername}`) {
-				await bot.sendMessage(id, stop11Message, { parse_mode: 'Markdown' })
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
-			}
+			// if (text === '/stop11' || text === `/stop11@${botUsername}`) {
+			// 	await bot.sendMessage(id, stop11Message, { parse_mode: 'Markdown' })
+			// 	try {
+			// 		await bot.deleteMessage(id, message_id)
+			// 	} catch (error) {
+			// 		console.error('Error deleting message', error.toString())
+			// 	}
+			// }
 		}
 	} catch (error) {
 		console.error('Error in bot operation:', error.toString())
