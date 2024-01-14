@@ -150,14 +150,11 @@ module.exports = async (request, response) => {
 					.catch(error => console.error('Error sending message', error.toString()))
 			}
 
-			// addMessageId(id, message_id, text)
-
-			// if (isCommand(text)) {
-			// 	deletePreviousMessages(id, bot)
-			// }
+			if (isCommand(text)) {
+				deletePreviousMessages(id, bot)
+			}
 
 			// В обработчике команд
-
 			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
 				const question = questions[randomIndex]
