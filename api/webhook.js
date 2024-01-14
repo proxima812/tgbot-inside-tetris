@@ -2,6 +2,8 @@
 // Fixes an error with Promise cancellation
 process.env.NTBA_FIX_319 = 'test'
 
+const TOKEN = process.env.API_TOKEN
+
 // Подключаем библиотеку Telegram Bot API
 const TelegramBot = require('node-telegram-bot-api')
 
@@ -546,17 +548,16 @@ function isCommand(text) {
 	return commands.includes(text)
 }
 
-// Функция для добавления ID сообщения в Map
 function addMessageId(chatId, messageId, text) {
-	if (isCommand(text) && !messageIds.has(chatId)) {
+	// Если сообщение является командой
+	if (['/stop10', '/stop11'].includes(text) && !messageIds.has(chatId)) {
 		messageIds.set(chatId, [])
 	}
-	if (isCommand(text)) {
+	if (['/stop10', '/stop11'].includes(text)) {
 		messageIds.get(chatId).push(messageId)
 	}
 }
 
-// Функция для удаления предыдущих сообщений
 function deletePreviousMessages(chatId, bot) {
 	if (messageIds.has(chatId)) {
 		const ids = messageIds.get(chatId)
@@ -569,13 +570,26 @@ function deletePreviousMessages(chatId, bot) {
 	}
 }
 
+const commandLastCalled = new Map()
+
+async function canCallCommand(chatId, command, delay = 30000) {
+	const now = Date.now()
+	const lastCalled = commandLastCalled.get(`${chatId}_${command}`)
+	if (!lastCalled || now - lastCalled > delay) {
+		commandLastCalled.set(`${chatId}_${command}`, now)
+		return true
+	}
+	return false
+}
+
+
 const botUsername = 'tetris_dusha_bot'
 
 // Экспортируем функцию как асинхронную
 module.exports = async (request, response) => {
 	try {
 		// Создаем новый экземпляр бота с токеном от BotFather
-		const bot = new TelegramBot('6977955174:AAHbQ6CpdIvPnVsJBh14vPFw1iWm6UT38XQ')
+		const bot = new TelegramBot(TOKEN)
 
 		// Получаем тело POST-запроса от Telegram
 		const { body } = request
@@ -592,6 +606,20 @@ module.exports = async (request, response) => {
 			// Проверка на команду и удаление предыдущих сообщений
 			if (isCommand(text)) {
 				deletePreviousMessages(id, bot)
+      }
+      
+      if (['/stop10', '/stop11'].includes(text)) {
+				const canCall = await canCallCommand(id, text)
+				if (canCall) {
+					deletePreviousMessages(id, bot)
+					// Ваша логика отправки сообщения...
+				} else {
+					// Опционально: отправить сообщение о задержке
+					await bot.sendMessage(
+						id,
+						'Пожалуйста, подождите перед повторным использованием команды.',
+					)
+				}
 			}
 
 			// Проверка на команду и удаление предыдущих сообщений
