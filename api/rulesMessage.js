@@ -22,5 +22,4 @@ const rulesMessage = `❗️ПРАВИЛА ЧАТА ❗️
 
 Возьмите то, что вам подходит и отбросьте всё остальное ❤️`
 
-
 module.exports = rulesMessage
