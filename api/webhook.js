@@ -5,7 +5,6 @@ const TOKEN = process.env.API_TOKEN
 const TelegramBot = require('node-telegram-bot-api')
 
 const questions = require('./questions')
-const { rulesMessage, stop11Message, stop10Message } = require('./MsgCommands')
 
 let messageIds = new Map()
 
@@ -51,6 +50,7 @@ const botUsername = 'tetris_dusha_bot'
 
 // Экспортируем функцию как асинхронную
 module.exports = async (request, response) => {
+	const { rulesMessage, stop11Message, stop10Message } = require('./MsgCommands')
 	try {
 		// Создаем новый экземпляр бота с токеном от BotFather
 		const bot = new TelegramBot(TOKEN)
@@ -71,22 +71,6 @@ module.exports = async (request, response) => {
 			if (isCommand(text)) {
 				deletePreviousMessages(id, bot)
 			}
-
-			// Проверка на команду и удаление предыдущих сообщений
-			// if (
-			// 	[
-			// 		'/q',
-			// 		`/q@${botUsername}`,
-			// 		'/rules',
-			// 		`/rules@${botUsername}`,
-			// 		'/stop11',
-			// 		`/stop11@${botUsername}`,
-			// 		'/stop10',
-			// 		`/stop10@${botUsername}`,
-			// 	].includes(text)
-			// ) {
-			// 	deletePreviousMessages(id, bot)
-			// }
 
 			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
@@ -115,27 +99,25 @@ module.exports = async (request, response) => {
 						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
 					})
 					.catch(error => console.error('Error sending message', error.toString()))
-      }
-      
-      	if (text === '/stop10' || text === `/stop10@${botUsername}`) {
-					await bot
-						.sendMessage(id, stop10Message, { parse_mode: 'Markdown' })
-						.then(sentMessage => {
-							addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
-						})
-						.catch(error => console.error('Error sending message', error.toString()))
-        }
-      
-      	if (text === '/stop11' || text === `/stop11@${botUsername}`) {
-					await bot
-						.sendMessage(id, stop11Message, { parse_mode: 'Markdown' })
-						.then(sentMessage => {
-							addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
-						})
-						.catch(error => console.error('Error sending message', error.toString()))
-				}
+			}
 
-	
+			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
+				await bot
+					.sendMessage(id, stop10Message, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
+			}
+
+			if (text === '/stop11' || text === `/stop11@${botUsername}`) {
+				await bot
+					.sendMessage(id, stop11Message, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
+			}
 		}
 	} catch (error) {
 		console.error('Error sending message')
