@@ -13,15 +13,13 @@ const bot = new TelegramBot(TOKEN)
 
 const botUsername = 'tetris_dusha_bot'
 
-
-
-
 module.exports = async (request, response) => {
 	try {
 		const { body } = request
 
 		if (body.message) {
 			const {
+				message_id,
 				chat: { id },
 				text,
 			} = body.message
@@ -34,7 +32,6 @@ module.exports = async (request, response) => {
 
 				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 
-				// Попытка удалить сообщение с командой /q
 				// try {
 				//   await bot.deleteMessage(id, message_id)
 				// } catch (error) {
@@ -44,6 +41,11 @@ module.exports = async (request, response) => {
 
 			if (text === '/rules' || text === `/rules@${botUsername}`) {
 				await bot.sendMessage(id, rulesMessage, { parse_mode: 'Markdown' })
+				try {
+					await bot.deleteMessage(id, message_id)
+				} catch (error) {
+					console.error('Error deleting message', error.toString())
+				}
 			}
 
 			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
@@ -51,10 +53,20 @@ module.exports = async (request, response) => {
 					parse_mode: 'Markdown',
 					disable_web_page_preview: true,
 				})
+				try {
+					await bot.deleteMessage(id, message_id)
+				} catch (error) {
+					console.error('Error deleting message', error.toString())
+				}
 			}
 
 			if (text === '/stop11' || text === `/stop11@${botUsername}`) {
 				await bot.sendMessage(id, stop11Message, { parse_mode: 'Markdown' })
+				try {
+					await bot.deleteMessage(id, message_id)
+				} catch (error) {
+					console.error('Error deleting message', error.toString())
+				}
 			}
 		}
 	} catch (error) {
