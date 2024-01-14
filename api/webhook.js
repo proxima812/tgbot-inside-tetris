@@ -26,12 +26,7 @@ function isCommand(text) {
 	return commands.includes(text)
 }
 
-function addMessageId(chatId, messageId, text) {
-	if (['/stop10', '/stop11'].includes(text)) {
-		// Если это одна из команд, удаляем предыдущее сообщение
-		deletePreviousMessages(chatId, bot)
-	}
-	// Затем добавляем новый ID
+function addMessageId(chatId, messageId) {
 	messageIds.set(chatId, messageId)
 }
 
@@ -41,6 +36,7 @@ function deletePreviousMessages(chatId, bot) {
 		bot
 			.deleteMessage(chatId, messageId)
 			.catch(error => console.error('Error deleting message', error.toString()))
+		messageIds.delete(chatId) // Удалите ID из Map после удаления сообщения
 	}
 }
 
@@ -132,12 +128,27 @@ const rulesMessage = `❗️ПРАВИЛА ЧАТА ❗️
 module.exports = async (request, response) => {
 	try {
 		const { body } = request
+
 		if (body.message) {
 			const {
 				message_id,
 				chat: { id },
 				text,
 			} = body.message
+
+			if (['/stop10', '/stop11'].includes(text)) {
+				// Сначала удаляем предыдущее сообщение, если оно есть
+				deletePreviousMessages(id, bot)
+
+				// Затем отправляем новое сообщение
+				const messageToSend = text === '/stop10' ? stop10Message : stop11Message
+				await bot
+					.sendMessage(id, messageToSend, { parse_mode: 'Markdown' })
+					.then(sentMessage => {
+						addMessageId(id, sentMessage.message_id) // Добавляем ID нового сообщения
+					})
+					.catch(error => console.error('Error sending message', error.toString()))
+			}
 
 			// addMessageId(id, message_id, text)
 
@@ -146,16 +157,6 @@ module.exports = async (request, response) => {
 			// }
 
 			// В обработчике команд
-			if (['/stop10', '/stop11'].includes(text)) {
-				const messageToSend = text === '/stop10' ? stop10Message : stop11Message
-
-				await bot
-					.sendMessage(id, messageToSend, { parse_mode: 'Markdown' })
-					.then(sentMessage => {
-						addMessageId(id, sentMessage.message_id, text) // Добавляем ID сообщения бота
-					})
-					.catch(error => console.error('Error sending message', error.toString()))
-			}
 
 			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
@@ -188,7 +189,10 @@ module.exports = async (request, response) => {
 
 			if (text === '/stop10' || text === `/stop10@${botUsername}`) {
 				await bot
-					.sendMessage(id, stop10Message, { parse_mode: 'Markdown' })
+					.sendMessage(id, stop10Message, {
+						parse_mode: 'Markdown',
+						disable_web_page_preview: true,
+					})
 					.then(sentMessage => {
 						addMessageId(id, sentMessage.message_id) // Добавляем ID сообщения бота
 					})
