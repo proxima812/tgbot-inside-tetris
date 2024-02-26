@@ -32,14 +32,14 @@ module.exports = async (request, response) => {
 				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 			}
 
-			if (text === '/rules' || text === `/rules@${botUsername}`) {
-				await bot.sendMessage(id, rulesMessage, { parse_mode: 'Markdown' })
-				try {
-					await bot.deleteMessage(id, message_id)
-				} catch (error) {
-					console.error('Error deleting message', error.toString())
-				}
-			}
+			// if (text === '/rules' || text === `/rules@${botUsername}`) {
+			// 	await bot.sendMessage(id, rulesMessage, { parse_mode: 'Markdown' })
+			// 	try {
+			// 		await bot.deleteMessage(id, message_id)
+			// 	} catch (error) {
+			// 		console.error('Error deleting message', error.toString())
+			// 	}
+			// }
 
 			// if (text === '/stop10' || text === `/stop10@${botUsername}`) {
 			// 	await bot.sendMessage(id, stop10Message, {
