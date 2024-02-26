@@ -27,7 +27,7 @@ module.exports = async (request, response) => {
 			if (text === '/q' || text === `/q@${botUsername}`) {
 				const randomIndex = Math.floor(Math.random() * questions.length)
 				const question = questions[randomIndex]
-				const message = `🎈 Ваша тема: \n\n*"${question}"*`
+				const message = `❓ Ваша тема: \n\n*"${question}"*`
 
 				await bot.sendMessage(id, message, { parse_mode: 'Markdown' })
 			}
